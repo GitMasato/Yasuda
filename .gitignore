@@ -2,8 +2,6 @@
 CMakeCache.txt
 CMakeFiles/
 build/
-test/test_mag/std*
-test/test_mag/test_mag/
 
 # Prerequisites
 *.d

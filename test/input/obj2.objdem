@@ -39,7 +39,7 @@ Object_End
 	Direction_Unit_Vector 0.0 0.0 1.0
 Object_End
 
-Object
+#Object
 	Hollow_Cylinder
 	Position 0.03 0.03 0.0295
 	Visualization_On 1
