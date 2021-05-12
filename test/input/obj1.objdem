@@ -1,0 +1,32 @@
+# Object file (First # is to comment out the line). put "#" prior to "Object" if you don't need it(If there is no Field_Base or Boundary_Base, the default object is generated). Only one object is allowed for Floor, Field_Base, Boundary_Field. 
+
+#Object
+	Floor
+	Position 0.0 0.0 0.0
+	Visualization_On 1
+ 	Collision_On 1
+	Vibration_On 0
+	Vibration_Amplitude 0.004
+	Vibration_Frequency 20.0
+	Vibration_Unit_Vector -0.7071 0.0 0.7071
+Object_End
+
+Object
+	Field_Base
+	Position 0.0 0.0 0.0
+	Vibration_On 0
+	Vibration_Amplitude 0.0
+	Vibration_Frequency 0.0
+	Vibration_Unit_Vector 0.0 0.0 0.0
+Object_End
+
+Object
+	Boundary_Base
+	Position 0.0 0.0 0.0
+	Vibration_On 0
+	Vibration_Amplitude 0.0
+	Vibration_Frequency 0.0
+	Vibration_Unit_Vector 0.0 0.0 0.0
+Object_End
+
+[EOF]
