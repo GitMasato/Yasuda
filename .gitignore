@@ -2,6 +2,7 @@
 CMakeCache.txt
 CMakeFiles/
 build/
+test/test_1/
 
 # Prerequisites
 *.d
