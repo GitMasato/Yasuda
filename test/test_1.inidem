@@ -7,7 +7,7 @@ Cell_Size_Ratio_Long_Range_XYZ  5.0 5.0 5.0
 Enable_Cell_Z 1 60.0e-3
 
 Time_Step 1.0e-5
-Simulation_Time 0.1
+Simulation_Time 1.0
 Output_Time 1.0e-2
 Enable_Particle_Info_Output 0 po ve
 Enable_Vtk_Output 0 id ve
