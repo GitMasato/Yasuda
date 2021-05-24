@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
 
 	dem::DEM daf;
 
-	daf.SetPathInput(argc, argv);	//load command line input 
+	daf.SetPathInput(argc, argv);	//load command line input
 
 	daf.LoadParamater();			//load ini input file
 
