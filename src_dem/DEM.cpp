@@ -4,12 +4,12 @@ namespace dem
 {
 
 	void DEM::RunDEM() noexcept
-	{	
+	{
 		double time = 0.0;
 		int output_step = 0, ele_update_step = 0, mag_update_step = 0;
 
 		#pragma omp parallel num_threads(openmp_size) if(is_openmp)
-		{			
+		{
 			// output initial condition
 			auto kinetic_energy = ptcl.GetKineticEnergy();
 			#pragma omp single
@@ -20,7 +20,7 @@ namespace dem
 				if (is_ptcl_output) output.CreatePtclFile(time, ptcl_file, ptcl_key);
 				if (is_vtk_output) vtk.CreateFile(time, vtk_file, vtk_key);
 				output_step += intvl_output;
-			}		
+			}
 
 			/////////////////////////////////////////////////////////////////////
 			// dem loop /////////////////////////////////////////////////////////
@@ -38,18 +38,18 @@ namespace dem
 				ptcl.TimeIntegHAngVeloAngVerlet(time_step);
 				CheckBoundary();
 
-				// assign particles into virtual cell to find neighbor 
+				// assign particles into virtual cell to find neighbor
 				#pragma omp single
 				if (!ptcl.isPtclStaySizeChanged()) cell.ClearContainedPtcl();
 				cell.SetPtclInCell(is_periodic[2], is_cell_z, cell_domain_z);
-								
+
 				if (is_Coulomb_ptcl || is_diele_dipole || is_mag_dipole)
 				{
 					#pragma omp single
 					if (!ptcl.isPtclStaySizeChanged()) lr_cell.ClearContainedPtcl();
 					lr_cell.SetPtclInCell(is_periodic[2], is_cell_z, cell_domain_z);
 				}
-							
+
 				// calculation of electrostatic force
 				if ((step == ele_update_step) && (is_ele_field))
 				{
@@ -61,7 +61,7 @@ namespace dem
 					#pragma omp single
 					ele_update_step += intvl_ele;
 				}
-				
+
 				// calculation of mgnetic force
 				if ((step == mag_update_step) && (is_mag_field))
 				{
@@ -73,19 +73,19 @@ namespace dem
 					#pragma omp single
 					mag_update_step += intvl_mag;
 				}
-				
-				// clear collision order information   
+
+				// clear collision order information
 				#pragma omp single
 				coll.ClearCollOrder();
 
-				// detect collision     
+				// detect collision
 				if (is_adh) ptcl.ClearAdhForce();
 				if (is_image_force)	ptcl.ClearImageForce();
 				coll.DetectCollPtcl(is_periodic, domain, is_openmp, openmp_size);
 				if (!is_image_force) coll.DetectCollObj(is_openmp, openmp_size);
 				else coll.DetectCollObjImage(is_openmp, openmp_size, coef_image);
-					
-				// calculate collision  
+
+				// calculate collision
 				#pragma omp single
 				{
 					coll.SortCollInfo();
@@ -97,17 +97,17 @@ namespace dem
 
 				// sum forces (with gravitational force)
 				SumForceTorque();
-				
-				// update particle and object (velocity)  
+
+				// update particle and object (velocity)
 				ptcl.TimeIntegVeloVerlet(time_step);
 				ptcl.TimeIntegAngVeloVerlet(time_step);
 				#pragma omp single
 				obj.SetPostVelo(time);
 
-				// output file                                                                            
+				// output file
 				if (step == output_step)
 				{
-					kinetic_energy = ptcl.GetKineticEnergy();		
+					kinetic_energy = ptcl.GetKineticEnergy();
 					#pragma omp single
 					{
 						output.WriteTimeFile(step, total_step, kinetic_energy, time_file);
@@ -137,7 +137,7 @@ namespace dem
 		{
 			ele_field.SetPtclFieldInfo(is_periodic);
 			if (is_diele_force || is_diele_torque) ele_field.SetMoment(coef_ele_moment);
-			
+
 			if (is_diele_dipole)
 			{
 				if (is_Coulomb_ptcl) ptcl.ClearCoulombPtclForce();
@@ -240,7 +240,7 @@ namespace dem
 
 	}
 
-	
+
 	void DEM::AssociateObject() noexcept
 	{
 		std::cout << std::endl;
@@ -357,12 +357,12 @@ namespace dem
 			std::cout << "finish creating virtual cell, for long range interaction" << std::endl;
 			std::cout << std::endl;
 		}
-				
+
 		//cell.ShowValue();
 		//if (is_Coulomb_ptcl || is_diele_dipole || is_mag_dipole) lr_cell.ShowValue();
-		
+
 	}
-	
+
 
 	void DEM::SetPathInput(const int& argc, char** argv) noexcept
 	{
@@ -514,16 +514,16 @@ namespace dem
 		{
 			ele_field.LoadField(ele_input_file, ele_amp);
 		}
-		
+
 		// load magnetic field data
 		if (is_mag_field)
 		{
 			mag_field.LoadField(mag_input_file, mag_amp);
 		}
-		
+
 		// load partile data
 		ptcl.LoadPtcl(ptcl_input_file);
-		
+
 		// load object data
 		obj.LoadObj(dobj_input_file);
 	}
@@ -538,7 +538,7 @@ namespace dem
 		std::string line;
 
 		while (!fin.eof() && getline(fin, line))
-		{	
+		{
 			std::vector<std::string> key;
 			data_io.SplitLine(line, key);
 			if (key.empty()) continue;
@@ -564,14 +564,14 @@ namespace dem
 			SetFlagVariable(key, "Enable_Reynolds_Correction", is_reynolds, density_air);
 			SetArray(key, "Permittivity_Particle_Air_Object", permittivity_ptcl_air_obj);
 			SetArray(key, "Permeability_Particle_Air", permeability_ptcl_air);
-			
+
 			SetArray(key, "Coef_Restitution_Object", coef_rest_obj);
 			SetArray(key, "Coef_Restitution_Particle", coef_rest_ptcl);
 			SetArray(key, "Friction_Coef_Object_Particle", fri_coef_obj_ptcl);
 			SetFlagVariable(key, "Enable_Rolling_Friction", is_roll_fri, coef_roll_fri);
 			SetFlagVariable(key, "Enable_Adhesion_Force", is_adh, coef_adh);
 			SetVariable(key, "Enable_Image_Force_Object", is_image_force);
-			
+
 			SetVariable(key, "Enable_Electrostatic_Field", is_ele_field);
 			if (is_ele_field)
 			{
@@ -582,9 +582,9 @@ namespace dem
 				SetVariable(key, "Enable_Dielectrophoresis_Interaction", is_diele_dipole);
 				SetVariable(key, "Electrostatic_Effect_Update_Time", ele_update_time);
 				SetArray(key, "Electrostatic_Field_Start_Stop", ele_start_stop_time);
-				SetUndefinedPairArray(key, "Electrostatic_Field_On_Off", 
+				SetUndefinedPairArray(key, "Electrostatic_Field_On_Off",
 					ele_on_off_time, ele_input_file.size());
-				SetUndefinedArray(key, "Electrostatic_Field_Amplification", 
+				SetUndefinedArray(key, "Electrostatic_Field_Amplification",
 					ele_amp, ele_input_file.size());
 			}
 
@@ -596,18 +596,18 @@ namespace dem
 				SetVariable(key, "Enable_Magnetic_Interaction", is_mag_dipole);
 				SetVariable(key, "Magnetic_Effect_Update_Time", mag_update_time);
 				SetArray(key, "Magnetic_Field_Start_Stop", mag_start_stop_time);
-				SetUndefinedPairArray(key, "Magnetic_Field_On_Off", 
+				SetUndefinedPairArray(key, "Magnetic_Field_On_Off",
 					mag_on_off_time, mag_input_file.size());
-				SetUndefinedArray(key, "Magnetic_Field_Amplification", 
+				SetUndefinedArray(key, "Magnetic_Field_Amplification",
 					mag_amp, mag_input_file.size());
 			}
 		}
-		
+
 		total_step = static_cast<int>(simulation_time / time_step + 0.001);
-		
+
 		const double io = output_time / time_step + 0.001;
 		intvl_output = io > 1.0 ? static_cast<int>(io) : 1;
-		
+
 		const double ie = ele_update_time / time_step + 0.001;
 		intvl_ele = ie > 1.0 ? static_cast<int>(ie) : 1;
 
@@ -637,7 +637,7 @@ namespace dem
 		hard_sphere_info.coef_fri_ptcl = fri_coef_obj_ptcl[1];
 		hard_sphere_info.coef_adh = coef_adh;
 		hard_sphere_info.coef_roll_fri = coef_roll_fri;
-		
+
 		air_drag_info.coef_newton = 0.44 * PI * density_air * 0.5;
 		air_drag_info.coef_allen = 10.0 * PI * density_air * 0.5;
 		air_drag_info.coef_stokes = 6.0 * PI * viscosity;
@@ -703,7 +703,7 @@ namespace dem
 		scope.ShowArray(ele_start_stop_time, "ele_start_stop_time");
 		scope.ShowMultipleArray(ele_on_off_time, "ele_on_off_time");
 		scope.ShowArray(ele_amp, "ele_amp");
-		
+
 		scope.ShowVariable(is_mag_field, "is_mag_field");
 		scope.ShowVariable(is_mag_force, "is_mag_force");
 		scope.ShowVariable(is_mag_torque, "is_mag_torque");

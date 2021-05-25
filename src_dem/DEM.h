@@ -53,7 +53,7 @@ namespace dem
 		std::string vtk_file;
 
 		// input parameter
-		Vec3 domain;										// calculation_domain_length xyz (m)Å@Å@
+		Vec3 domain;										// calculation_domain_length xyz (m)ÔøΩ@ÔøΩ@
 		std::array<bool, 3> is_periodic;					// to apply periodic boundary condition xyz, yes:1 no:0
 		Vec3 coll_cell_ratio;								// cell size ratio to particle size, to sort particles spatially for collision calculation xyz
 		Vec3 lr_cell_ratio;									// cell size ratio to particle size, to sort particles spatially for dipole interactions
@@ -75,9 +75,9 @@ namespace dem
 		Vec3 gravity;										// gravitational acceleration xyz	(m/s2)
 		Vec3 air_velo;										// air velocity xyz (m/s)
 		bool is_airdrag;									// to apply air drag, yes:1 no:0
-		double viscosity;									// air viscosity (kg/s/m2)	
+		double viscosity;									// air viscosity (kg/s/m2)
 		bool is_cunningham;									// to apply cunningham_correction, yes:1 no:0
-		double mean_free_path;								// mean free path									// pressureÅ@(Pa)	
+		double mean_free_path;								// mean free path									// pressureÔøΩ@(Pa)
 		bool is_reynolds;									// to apply reynolds_number effect to air drag,  yes:1 no:0
 		double density_air;									// air density  (kg/m3)
 		std::array<double, 3> permittivity_ptcl_air_obj;	// permittivity ratio
@@ -86,9 +86,9 @@ namespace dem
 		std::array<double, 2> coef_rest_obj;				// coefficient of restitution
 		std::array<double, 2> coef_rest_ptcl;				// coefficient of restitution
 		std::array<double, 2> fri_coef_obj_ptcl;			// friction_coefficient
-		bool is_roll_fri;									// to apply rolling friction, yes:1 no:0	
+		bool is_roll_fri;									// to apply rolling friction, yes:1 no:0
 		double coef_roll_fri;								// coefficient of rolling friction
-		bool is_adh;										// to apply adhesion force, yes:1 no:0	
+		bool is_adh;										// to apply adhesion force, yes:1 no:0
 		double coef_adh;									// coefficient of adhesion force
 		bool is_image_force;								// to apply image force, yes:1 no:0
 
@@ -102,16 +102,16 @@ namespace dem
 		std::array<double, 2> ele_start_stop_time;			// when to start and stop applying electrostatic field (s)
 		std::vector<std::array<double, 2>> ele_on_off_time;	// duration to apply or remove one electrostatic field (s)
 		std::vector<double> ele_amp;						// amplification rate to electrostatic field strength
-		
+
 		bool is_mag_field;									// to apply magnetic field, yes:1 no:0
 		bool is_mag_force;									// to apply magnetic force, yes:1 no:0
 		bool is_mag_torque;									// to apply magnetic torque, yes:1 no:0
 		bool is_mag_dipole;									// to apply electrostatic dipole interactions between particle, yes:1 no:0
-		double mag_update_time;								// time step to update magnetic force  (s)	
+		double mag_update_time;								// time step to update magnetic force  (s)
 		std::array<double, 2> mag_start_stop_time;			// when to start and stop applying electrostatic field (s)
 		std::vector<std::array<double, 2>> mag_on_off_time;	// duration to apply or remove one electrostatic field (s)
 		std::vector<double> mag_amp;						// amplification rate to electrostatic field strength
-		
+
 		// temporal value, coefficient value
 		int total_step;
 		int intvl_output;
@@ -182,10 +182,10 @@ namespace dem
 		void LoadParamater() noexcept;
 
 		void ShowValue() const noexcept;
-			   
+
 
 		template<typename T>
-		void SetVariable(const std::vector<std::string>& Value, 
+		void SetVariable(const std::vector<std::string>& Value,
 			const std::string& Key, T& Parameter) noexcept
 		{
 			if (Value[0] == Key)
@@ -214,7 +214,7 @@ namespace dem
 
 
 		template<typename T>
-		void SetFlagVariable(const std::vector<std::string>& Value, 
+		void SetFlagVariable(const std::vector<std::string>& Value,
 			const std::string& Key, bool& Frag, T& Parameter) noexcept
 		{
 			if (Value[0] == Key)
@@ -245,7 +245,7 @@ namespace dem
 
 
 		template<typename T>
-		void SetVector3D(const std::vector<std::string>& Value, 
+		void SetVector3D(const std::vector<std::string>& Value,
 			const std::string& Key, Vector3D<T>& Parameter) noexcept
 		{
 			if (Value[0] == Key)
@@ -262,7 +262,7 @@ namespace dem
 
 
 		template<typename T>
-		void SetArray(const std::vector<std::string>& Value, 
+		void SetArray(const std::vector<std::string>& Value,
 			const std::string& Key, T& Parameter) noexcept
 		{
 			if (Value[0] == Key)
@@ -283,7 +283,7 @@ namespace dem
 
 
 		template<typename T>
-		void SetUndefinedArray(const std::vector<std::string>& Value, 
+		void SetUndefinedArray(const std::vector<std::string>& Value,
 			const std::string& Key, T& Parameter, const std::size_t Check_Num) noexcept
 		{
 			if (Value[0] == Key)
@@ -303,9 +303,9 @@ namespace dem
 			}
 		}
 
-		
+
 		template<typename T>
-		void SetFlagUndefinedArray(const std::vector<std::string>& Value, 
+		void SetFlagUndefinedArray(const std::vector<std::string>& Value,
 			const std::string& Key, bool& Frag, T& Parameter) noexcept
 		{
 			if (Value[0] == Key)
@@ -332,7 +332,7 @@ namespace dem
 
 
 		template<typename T>
-		void SetUndefinedPairArray(const std::vector<std::string>& Value, 
+		void SetUndefinedPairArray(const std::vector<std::string>& Value,
 			const std::string& Key, T& Parameter, const std::size_t Check_Num) noexcept
 		{
 			if (Value[0] == Key)
